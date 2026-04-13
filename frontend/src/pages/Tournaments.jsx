@@ -8,7 +8,7 @@ const Tournaments = () => {
                 <p className="text-lg sm:text-xl text-gray-400">
                     Stay tuned! Exciting tournaments are coming soon to Velocity Life.
                 </p>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                {/* <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     {[1, 2, 3].map((i) => (
                         <div key={i} className="bg-gray-900 border border-gray-800 p-6 sm:p-8 rounded-2xl space-y-4">
                             <div className="h-32 sm:h-40 bg-gray-800 rounded-xl mb-4"></div>
@@ -19,7 +19,9 @@ const Tournaments = () => {
                             </button>
                         </div>
                     ))}
-                </div>
+                </div> */}
+
+                <div className="h-45"></div>
             </div>
         </main>
     )

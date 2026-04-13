@@ -1,21 +1,21 @@
-# Use the full Node image for better stability on Apple Silicon
 FROM node:20
 
 WORKDIR /app
 
-# Copy package files
+# Copy only package files first (for caching)
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
-# Copy source code and Prisma schema
+# Copy rest of backend code
 COPY . .
 
-# Generate Prisma Client
+# Generate Prisma client
 RUN npx prisma generate
 
-# Final setup
-EXPOSE 5001
+# Use correct port (your app likely runs on 3000)
+EXPOSE 3000
 
+# Start server
 CMD ["node", "src/index.js"]
