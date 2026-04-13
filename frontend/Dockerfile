@@ -1,5 +1,5 @@
-# Use a specific Node version
-FROM node:20-slim
+# Use the full Node image for better stability on Apple Silicon
+FROM node:20
 
 WORKDIR /app
 

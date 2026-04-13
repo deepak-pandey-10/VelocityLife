@@ -1,17 +1,12 @@
-# Use a specific Node version
-FROM node:20-slim
-
-# Install OpenSSL (required by Prisma)
-RUN apt-get update -y && \
-    apt-get install -y openssl sqlite3 && \
-    rm -rf /var/lib/apt/lists/*
+# Use the full Node image for better stability on Apple Silicon
+FROM node:20
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (including devDependencies temporarily for generation)
+# Install dependencies
 RUN npm install
 
 # Copy source code and Prisma schema
