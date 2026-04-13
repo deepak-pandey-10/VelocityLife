@@ -113,7 +113,7 @@ const Home = () => {
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-white">Prime Location</h3>
-                                    <p className="text-sm text-gray-400">Near Stadium, Pithoragarh</p>
+                                    <p className="text-sm text-gray-400">Tildhukari, Pithoragarh</p>
                                 </div>
                             </div>
                             <div className="space-y-4">
@@ -255,7 +255,7 @@ const Home = () => {
                         {/* Map Area */}
                         <div className="lg:col-span-3 h-[300px] sm:h-[400px] lg:h-auto min-h-[300px] relative group">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d111987.9744957585!2d80.14972275820313!3d29.58550780000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a1add6715f5a89%3A0x600b3951f28740c8!2sPithoragarh%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1714856000000!5m2!1sen!2sin"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3469.659639795269!2d80.216425!3d29.584504900000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a125003dca0995%3A0x5c325d85ddedd908!2sVelocity%20life%20turf!5e0!3m2!1sen!2sin!4v1776055346524!5m2!1sen!2sin"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0, filter: 'grayscale(100%) invert(92%) contrast(83%)' }}
@@ -281,8 +281,8 @@ const Home = () => {
                                     </div>
                                     <div>
                                         <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                                            Near General BC Joshi Army Public School,<br />
-                                            Bin, Pithoragarh,<br />
+                                            Velocity life turf,<br />
+                                            Tildhukari, Pithoragarh,<br />
                                             Uttarakhand 262501
                                         </p>
                                     </div>
@@ -298,7 +298,7 @@ const Home = () => {
                             </div>
 
                             <a
-                                href="https://maps.google.com"
+                                href="https://www.google.com/maps/place/Velocity+life+turf/@29.5845049,80.216425,17z"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95 group text-sm sm:text-base"
