@@ -14,7 +14,7 @@ COPY . .
 # Generate Prisma client
 RUN npx prisma generate
 
-# Use correct port (your app likely runs on 3000)
+# Use correct port (Render and other platforms override PORT env var)
 EXPOSE 3000
 
 # Start server
