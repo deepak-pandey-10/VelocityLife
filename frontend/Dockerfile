@@ -3,7 +3,7 @@ FROM node:20
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY frontend/package*.json ./
 
 # Install dependencies
 RUN npm install
