@@ -14,12 +14,13 @@ const Booking = () => {
     const [bookedSlots, setBookedSlots] = useState([])
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
     const scrollRef = useRef(null)
 
     const API_URL = import.meta.env.VITE_API_URL || '/api';
     const RATE_PER_HOUR = 800
 
-    const handleConfirm = async () => {
+    const submitBooking = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
             navigate('/login');
@@ -358,7 +359,7 @@ const Booking = () => {
                                     )}
 
                                     <button
-                                        onClick={handleConfirm}
+                                        onClick={() => setShowConfirmModal(true)}
                                         disabled={selectedSlots.length === 0 || bookingLoading || success}
                                         className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg flex items-center justify-center gap-2 ${selectedSlots.length > 0 && !bookingLoading && !success
                                             ? 'bg-primary text-black hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] shadow-primary/20'
@@ -384,6 +385,72 @@ const Booking = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Confirmation Modal */}
+            <AnimatePresence>
+                {showConfirmModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-zinc-900 border border-white/10 rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
+                            
+                            <h3 className="text-xl font-heading font-black text-white uppercase mb-2">Confirm Booking</h3>
+                            <p className="text-sm text-gray-400 mb-6 font-mono">Verify your session details</p>
+                            
+                            <div className="bg-zinc-950/50 rounded-xl p-4 mb-6 border border-white/5 space-y-3">
+                                <div className="flex justify-between items-center text-sm">
+                                    <span className="text-gray-500 font-mono">DATE</span>
+                                    <span className="font-bold text-white">{selectedDate ? dates.find(d => d.full === selectedDate)?.displayDate : ''}</span>
+                                </div>
+                                <div className="flex justify-between items-start text-sm">
+                                    <span className="text-gray-500 font-mono">TIME(S)</span>
+                                    <div className="text-right flex flex-col gap-1">
+                                        {selectedSlots.map(slot => (
+                                            <span key={slot} className="font-bold text-primary tracking-wide">{slot}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center text-sm pt-3 border-t border-white/5">
+                                    <span className="text-gray-500 font-mono">TOTAL</span>
+                                    <span className="font-bold text-white text-lg tracking-widest">₹{selectedSlots.length * RATE_PER_HOUR}</span>
+                                </div>
+                            </div>
+                            
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setShowConfirmModal(false)}
+                                    disabled={bookingLoading}
+                                    className="flex-1 py-3 bg-zinc-800 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-zinc-700 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={submitBooking}
+                                    disabled={bookingLoading}
+                                    className="flex-1 py-3 bg-primary text-black rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary/90 flex items-center justify-center transition-colors"
+                                >
+                                    {bookingLoading ? <Loader2 size={16} className="animate-spin" /> : 'Confirm'}
+                                </button>
+                            </div>
+                            
+                            {error && (
+                                <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-[11px] font-mono flex items-center gap-2">
+                                    <AlertCircle size={14} /> {error}
+                                </div>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </main>
     )
 }
