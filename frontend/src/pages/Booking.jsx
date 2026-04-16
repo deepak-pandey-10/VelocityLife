@@ -112,6 +112,33 @@ const Booking = () => {
         }
     }
 
+    const isSlotPassed = (timeString) => {
+        if (!selectedDate) return false;
+        
+        const today = new Date();
+        const selected = new Date(selectedDate);
+        
+        // If selected date is strictly in the future, slot hasn't passed
+        if (selected.setHours(0,0,0,0) > today.setHours(0,0,0,0)) return false;
+        
+        // If selected date is in the past (shouldn't happen with our calendar gen, but to be sure)
+        if (selected.setHours(0,0,0,0) < today.setHours(0,0,0,0)) return true;
+
+        // Date is today. We parse the start hour of the slot.
+        // Example timeString: '7 AM - 8 AM' or '12 PM - 1 PM'
+        const match = timeString.match(/^(\d+)\s+(AM|PM)/);
+        if (!match) return false;
+
+        let hour = parseInt(match[1]);
+        const period = match[2];
+
+        if (period === 'PM' && hour !== 12) hour += 12;
+        if (period === 'AM' && hour === 12) hour = 0;
+
+        const currentHour = new Date().getHours();
+        return hour <= currentHour;
+    };
+
     const toggleSlot = (time) => {
         setSelectedSlots(prev =>
             prev.includes(time)
@@ -217,28 +244,33 @@ const Booking = () => {
                                 {slots[selectedCategory].times.map((time) => {
                                     const isSelected = selectedSlots.includes(time);
                                     const isBooked = bookedSlots.includes(time);
+                                    const isPassed = isSlotPassed(time);
+
+                                    const isDisabled = isBooked || isPassed;
 
                                     return (
                                         <button
                                             key={time}
-                                            disabled={isBooked}
+                                            disabled={isDisabled}
                                             onClick={() => toggleSlot(time)}
-                                            className={`relative group px-4 py-4 md:py-6 rounded-xl border-l-4 transition-all duration-200 flex flex-col items-start gap-1 overflow-hidden ${isBooked
-                                                ? 'bg-zinc-950 border-red-500/20 opacity-50 cursor-not-allowed'
-                                                : isSelected
-                                                    ? 'bg-zinc-800 border-primary shadow-lg'
-                                                    : 'bg-zinc-900/50 border-white/10 hover:bg-zinc-900 hover:border-white/30'
+                                            className={`relative group px-4 py-4 md:py-6 rounded-xl border-l-4 transition-all duration-200 flex flex-col items-start gap-1 overflow-hidden ${isPassed
+                                                ? 'bg-zinc-900 border-zinc-700 opacity-40 cursor-not-allowed'
+                                                : isBooked
+                                                    ? 'bg-zinc-950 border-red-500/20 opacity-50 cursor-not-allowed'
+                                                    : isSelected
+                                                        ? 'bg-zinc-800 border-primary shadow-lg'
+                                                        : 'bg-zinc-900/50 border-white/10 hover:bg-zinc-900 hover:border-white/30'
                                                 }`}
                                         >
-                                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isBooked ? 'text-red-500' : isSelected ? 'text-primary' : 'text-gray-500'}`}>
-                                                {isBooked ? 'Unavailable' : 'Available'}
+                                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isPassed ? 'text-zinc-600' : isBooked ? 'text-red-500' : isSelected ? 'text-primary' : 'text-gray-500'}`}>
+                                                {isPassed ? 'Passed' : isBooked ? 'Unavailable' : 'Available'}
                                             </span>
-                                            <span className={`text-base md:text-lg font-heading font-bold ${isBooked ? 'text-zinc-600' : isSelected ? 'text-white' : 'text-gray-300'}`}>
+                                            <span className={`text-base md:text-lg font-heading font-bold ${isDisabled ? 'text-zinc-600' : isSelected ? 'text-white' : 'text-gray-300'}`}>
                                                 {time}
                                             </span>
 
                                             {/* Selection Indicator */}
-                                            {isSelected && !isBooked && (
+                                            {isSelected && !isDisabled && (
                                                 <motion.div
                                                     layoutId={`check-${time}`}
                                                     className="absolute top-3 right-3 text-primary"
