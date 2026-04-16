@@ -11,27 +11,27 @@ const prisma = require('./config/db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ CORS (secure for production)
+
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// ✅ Middleware
+
 app.use(express.json());
 
-// ✅ Routes
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
 
-// ✅ Root route
+
 app.get('/', (req, res) => {
   res.json({ message: 'VelocityLife Backend is running!' });
 });
 
-// ✅ Health check (important for Render/Docker)
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -40,7 +40,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ✅ Global error handler
+
 app.use((err, req, res, next) => {
   console.error('Error:', err.stack);
   res.status(500).json({
@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ✅ Start server safely
+
 const startServer = async () => {
   try {
     await prisma.$connect();
@@ -68,7 +68,7 @@ const startServer = async () => {
 
 startServer();
 
-// ✅ Graceful shutdown (VERY important for Docker)
+
 process.on('SIGINT', async () => {
   console.log('🛑 Shutting down (SIGINT)...');
   await prisma.$disconnect();
@@ -79,4 +79,8 @@ process.on('SIGTERM', async () => {
   console.log('🛑 Shutting down (SIGTERM)...');
   await prisma.$disconnect();
   process.exit(0);
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
